@@ -1,0 +1,83 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+///
+/// Base class for Provider classes.
+/// It exposes [setLoading], [setError] method & [loading] state.
+///
+class BaseChangeNotifier extends ChangeNotifier {
+  bool _loading = true;
+  String? _errorMessage;
+
+  /// retrurns active loading state.
+  bool get loading => _loading;
+
+  /// returns error message if error occurs.
+  String? get errorMessage => _errorMessage;
+
+  ///
+  /// Used to set loading value. Accepts params [loading] of type `bool`.
+  /// Updates variables via calling `notifyListeners`.
+  ///
+  void setLoading(bool loading) {
+    _loading = loading;
+    if (loading) {
+      _error = null;
+    }
+    notifyListeners();
+  }
+
+  ///
+  /// Used to set error message. Accepts params [errorMessage] of type `String`.
+  /// Updates variables via calling `notifyListeners`.
+  ///
+  void setError(String message) {
+    _errorMessage = message;
+    notifyListeners();
+  }
+}
+
+///
+/// A widget to manage the state of provider on UI. Exposes three parameters:
+///
+/// [loader]  : A widget which is used to show loading animation.
+///
+/// [error]   : A widget which is used to show error widget.
+///
+/// [builder] : A success build which is a function. Provides context and instance of passed
+/// provider
+///
+class BaseProviderBuilder<T extends BaseChangeNotifier>
+    extends StatelessWidget {
+  /// Sucess builder for the widget.
+  /// It provides context and the passed provider type to the builder function.
+  final Widget Function(BuildContext context, T provider) builder;
+
+  /// A widget which is used to show loading animation.
+  final Widget? loader;
+
+  /// A widget which is used to show error widget.
+  final Widget? error;
+
+  const BaseProviderBuilder({
+    super.key,
+    required this.builder,
+    this.loader,
+    this.error,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<T>(
+      builder: (context, provider, _) {
+        if (provider.loading) {
+          return loader ?? Center(child: CircularProgressIndicator());
+        } else if (!provider.loading && provider.errorMessage != null) {
+          return error ?? const Text(provider.error!);
+        } else {
+          return builder(context, provider);
+        }
+      },
+    );
+  }
+}
