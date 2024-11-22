@@ -1,4 +1,4 @@
-name: example_hooks
+name: base_app_brick_hooks
 
 environment:
   sdk: ">=3.2.0 <4.0.0"

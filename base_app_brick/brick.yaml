@@ -1,5 +1,5 @@
-name: feature
-description: A brick which provides boiler plate for new feature.
+name: base_app_brick
+description: A new brick created with the Mason CLI.
 
 # The following defines the brick repository url.
 # Uncomment and update the following line before publishing the brick.
@@ -26,20 +26,8 @@ environment:
 #  * a list of values (enums only)
 #  * an optional separator (list only)
 vars:
-  feature_name:
+  name:
     type: string
-    description: The name of feature you are building.
-    prompt: What is the name of feature?
-    default: new_feature
-
-  state_management:
-    type: enum
-    description: Lets user select the choice of statemangment.
-    prompt: What state management you wanna use?
-    default: cubit
-    values:
-        - bloc
-        - cubit 
-        - provider
-        
-
+    description: Your name
+    default: Dash
+    prompt: What is your name?
